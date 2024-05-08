@@ -1,6 +1,8 @@
 package se.distansakademin.spring_security_cognito_240424.contollers;
 
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,5 +25,18 @@ public class HomeController {
     public String postTest(){
         System.out.println(">>>>>> POST: /test");
         return "redirect:/test";
+    }
+
+    @GetMapping("/user")
+    public String getUser(Model model, OAuth2AuthenticationToken token){
+        String username = token.getName(); // Användarnamnet (pippi)
+
+        // sub == subject (användarens unika id)
+        String userGuid =  token.getPrincipal().getAttribute("sub"); // "XXXXXXXX-XXXX-XXXX-XXXXXXXX";
+
+        model.addAttribute("username", username);
+        model.addAttribute("userGuid", userGuid);
+
+        return "user";
     }
 }
